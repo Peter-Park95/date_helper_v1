@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify
 from app.services import get_recommendations
+from flask_cors import cross_origin
 
 api_routes = Blueprint("api_routes", __name__)
 
 @api_routes.route("/recommend", methods=["POST"])
+@cross_origin()
 def recommend():
     data = request.get_json()
     

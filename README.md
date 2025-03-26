@@ -15,8 +15,18 @@
 ## 🚀 실행 방법
 ```bash
 # 백엔드 실행
+
+# 1. backend 디렉토리로 이동
 cd backend
-python app.py
+# 2. 가상환경 생성 및 실행 (처음 한 번만)
+python -m venv venv
+venv\Scripts\activate   # Windows 기준
+# 3. 필요한 패키지 설치
+pip install -r requirements.txt
+# 4. 서버 실행
+python run.p
+
+
 
 # 프론트엔드 실행
 cd frontend

@@ -1,23 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import RecommendForm from "./RecommendForm";
+import RecommendationList from "./RecommendationList";
+import axios from "axios";
 
 function App() {
+  const [recommendations, setRecommendations] = useState(null);
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      const res = await axios.post("http://localhost:5000/recommend", formData);
+      setRecommendations(res.data.recommendations);
+    } catch (err) {
+      alert("추천을 불러오는데 실패했어요.");
+      console.error(err);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1 style={{ padding: "1rem" }}>💘 데이트 추천 도우미</h1>
+      <RecommendForm onSubmit={handleFormSubmit} />
+      {recommendations && <RecommendationList data={recommendations} />}
     </div>
   );
 }

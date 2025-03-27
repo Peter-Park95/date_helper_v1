@@ -6,17 +6,18 @@ from dotenv import load_dotenv
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def get_recommendations(date_time, age_group, location, meal_status, preference):
-    meal_text = "식사를 마친 상태" if meal_status else "아직 식사를 하지 않은 상태"
+def get_recommendations(date, time, age_group, location, relation):
     
     prompt = f"""
-    안녕, 데이트 코스를 짜줄 수 있겠니?
-    데이트는 {date_time}부터 시작할 예정이야.
-    우리는 {age_group}이고, 현재 위치는 {location}이야.
-    {meal_text}이며, {preference}로 데이트하고 싶어.
-    
-    위 조건을 바탕으로 데이트 코스를 추천해줘.
-    각 장소에 대한 짧은 설명도 함께 제공해줘.
+    안녕! 우리 커플을 위한 데이트 코스를 추천해줄래?  
+    - 날짜: {date}  
+    - 시간대: {time}  
+    - 장소: {location}  
+    - 연령대: {age_group}대  
+    - 관계: {relation}  
+
+    위 정보를 바탕으로, **시간대별 일정이 포함된 데이트 코스를 단계별로 제안해줘.**
+    각 추천마다 장소명, 간단한 설명, 예상 소요시간 정도도 함께 알려주면 좋아.
     """
 
 

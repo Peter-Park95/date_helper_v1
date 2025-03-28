@@ -1,25 +1,32 @@
 import { useState } from "react";
-import LocationSelector from "./components/LocationSelector";
+import LocationSelector from "./components/LocationSelector"; // ✅ 위치 선택 컴포넌트
+
 export default function RecommendForm({ onSubmit }) {
   const [form, setForm] = useState({
     date: "주말",
     time: "저녁",
     age_group: "20",
-    location: "",
-    relation: "연인"
+    location: "", // 선택된 상세 지역 (예: 홍대, 합정)
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
 
+  const handleLocationSelect = (selectedLocation) => {
+    setForm({ ...form, location: selectedLocation });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // 👈 로딩 시작
-    await onSubmit(form); // 외부 요청 (Promise)
-    setLoading(false); // 👈 로딩 끝
+    const { date, age_group, location } = form;
+
+    const res = await fetch(
+      `http://localhost:5000/recommend-course?location=${encodeURIComponent(location)}&age_group=${age_group}&date=${date}`
+    );
+    const data = await res.json();
+    onSubmit(data);
   };
 
   const formStyle = {
@@ -55,14 +62,14 @@ export default function RecommendForm({ onSubmit }) {
     fontSize: "1rem",
     fontWeight: "bold",
     cursor: "pointer",
-    marginTop: "1rem",
-    opacity: loading ? 0.7 : 1,
+    marginTop: "1rem"
   };
 
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
       <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>💌 나만의 데이트 추천 받기</h2>
 
+      {/* 날짜 */}
       <label style={labelStyle}>
         📅 언제 만날까요?  
         <select name="date" value={form.date} onChange={handleChange} style={inputStyle}>
@@ -71,6 +78,7 @@ export default function RecommendForm({ onSubmit }) {
         </select>
       </label>
 
+      {/* 시간 */}
       <label style={labelStyle}>
         🕒 시간대는요?  
         <select name="time" value={form.time} onChange={handleChange} style={inputStyle}>
@@ -80,6 +88,7 @@ export default function RecommendForm({ onSubmit }) {
         </select>
       </label>
 
+      {/* 연령대 */}
       <label style={labelStyle}>
         👥 연령대는요?  
         <select name="age_group" value={form.age_group} onChange={handleChange} style={inputStyle}>
@@ -91,24 +100,13 @@ export default function RecommendForm({ onSubmit }) {
         </select>
       </label>
 
-      <label style={labelStyle}> 
-        <LocationSelector onSelect={(location) => setForm({ ...form, location })} />
-        {/* <input name="location" value={form.location} onChange={handleChange} placeholder="예: 서울 건대" style={inputStyle} /> */}
-      </label>
-
+      {/* 위치 선택기 컴포넌트 */}
       <label style={labelStyle}>
-        💑 어떤 사이인가요?  
-        <select name="relation" value={form.relation} onChange={handleChange} style={inputStyle}>
-          <option>연인</option>
-          <option>썸</option>
-          <option>친구</option>
-        </select>
+        <LocationSelector onSelect={handleLocationSelect} />
       </label>
 
       <div style={{ textAlign: "center" }}>
-      <button type="submit" style={buttonStyle} disabled={loading}>
-          {loading ? "⏳ 추천받는 중..." : "✨ 데이트 추천 받기"}
-        </button>
+        <button type="submit" style={buttonStyle}>✨ 데이트 추천 받기</button>
       </div>
     </form>
   );

@@ -1,21 +1,37 @@
+# app/routes.py
 from flask import Blueprint, request, jsonify
-from app.services import get_recommendations
 from flask_cors import cross_origin
+from app.kakao import generate_recommendations
 
 api_routes = Blueprint("api_routes", __name__)
+
+# 🔻 [기존 라우트 - GPT 기반] (필요 시 주석 처리 가능)
+"""
+from app.services import get_recommendations
 
 @api_routes.route("/recommend", methods=["POST"])
 @cross_origin()
 def recommend():
     data = request.get_json()
 
-    date = data["date"]              # 평일 / 주말
-    time = data["time"]              # 낮 / 저녁 / 새벽
-    age_group = data["age_group"]    # 10 / 20 / 30 ...
-    location = data["location"]      # 예: 서울 건대
-    relation = data["relation"]      # 친구 / 썸 / 연인
+    date = data["date"]
+    time = data["time"]
+    age_group = data["age_group"]
+    location = data["location"]
+    relation = data["relation"]
 
     # ChatGPT API로 추천 코스 요청
     recommendations = get_recommendations(date, time, age_group, location, relation)
 
     return jsonify({"recommendations": recommendations})
+"""
+
+# ✅ [새 라우트 - 카카오 기반]
+@api_routes.route("/recommend-course", methods=["GET"])
+@cross_origin()
+def recommend_course():
+    location = request.args.get("location", "성수")
+    age_group = request.args.get("age_group", "20")
+    date = request.args.get("date", "평일")
+    results = generate_recommendations(location, age_group, date)
+    return jsonify(results)

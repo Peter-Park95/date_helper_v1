@@ -1,28 +1,26 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import RecommendForm from "./RecommendForm";
-import RecommendationList from "./RecommendationList";
-import axios from "axios";
 
 function App() {
-  const [recommendations, setRecommendations] = useState(null);
-
-  const handleFormSubmit = async (formData) => {
-    try {
-      const res = await axios.post("http://localhost:5000/recommend", formData);
-      setRecommendations(res.data.recommendations);
-    } catch (err) {
-      alert("추천을 불러오는데 실패했어요.");
-      console.error(err);
-    }
-  };
+  const [recommendations, setRecommendations] = useState([]);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1 style={{ textAlign: "center", fontSize: "2rem", marginBottom: "2rem" }}>
-      🩷 Date Planner 
-      </h1>
-      <RecommendForm onSubmit={handleFormSubmit} />
-      {recommendations && <RecommendationList data={recommendations} />}
+    <div>
+      <RecommendForm onSubmit={setRecommendations} />
+      <hr style={{ margin: "2rem 0" }} />
+      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+        {recommendations.map((place, idx) => (
+          <div key={idx} style={{ marginBottom: "2rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "12px" }}>
+            <h3>✨ {place.course_step}단계 추천</h3>
+            <p>📍 {place.place_name}</p>
+            <p>🗺️ {place.address_name}</p>
+            <p>📝 {place.description}</p>
+            <img src={place.thumbnail} alt="썸네일" style={{ width: "100%", maxWidth: "300px", borderRadius: "12px" }} />
+            <br />
+            <a href={place.place_url} target="_blank" rel="noreferrer">🔗 지도 보기</a>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

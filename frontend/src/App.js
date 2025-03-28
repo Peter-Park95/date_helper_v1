@@ -17,8 +17,10 @@ function App() {
   };
 
   return (
-    <div>
-      <h1 style={{ padding: "1rem" }}>💘 데이트 추천 도우미</h1>
+    <div style={{ padding: "2rem" }}>
+      <h1 style={{ textAlign: "center", fontSize: "2rem", marginBottom: "2rem" }}>
+      🩷 Date Planner 
+      </h1>
       <RecommendForm onSubmit={handleFormSubmit} />
       {recommendations && <RecommendationList data={recommendations} />}
     </div>

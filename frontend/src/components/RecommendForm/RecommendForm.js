@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LocationSelector from "./components/LocationSelector"; // ✅ 위치 선택 컴포넌트
+import LocationSelector from "./LocationSelector"; // ✅ 위치 선택 컴포넌트
 
 export default function RecommendForm({ onSubmit }) {
   const [form, setForm] = useState({

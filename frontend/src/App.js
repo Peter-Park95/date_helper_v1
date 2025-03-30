@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import RecommendForm from "./RecommendForm";
-import RecommendationSection from "./components/RecommendationSelection";
+import RecommendForm from "./components/RecommendForm/RecommendForm";
+import RecommendationSection from "./components/Recommendations/RecommendationSelection";
 
 function App() {
   const [recommendations, setRecommendations] = useState([]);

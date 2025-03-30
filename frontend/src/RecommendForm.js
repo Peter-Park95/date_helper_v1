@@ -32,11 +32,12 @@ export default function RecommendForm({ onSubmit }) {
   const formStyle = {
     padding: "2rem",
     borderRadius: "1rem",
-    backgroundColor: "#f9f9f9",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    backgroundColor: "#FFF8F1", // 크림톤 배경
+    boxShadow: "0 4px 12px rgba(0,0,0,0.05)", // 은은한 그림자
     maxWidth: "480px",
     margin: "2rem auto",
-    fontFamily: "'Pretendard', sans-serif"
+    fontFamily: "'Pretendard', sans-serif",
+    border: "1px solid #FFE0B2" // 살구 테두리
   };
 
   const labelStyle = {

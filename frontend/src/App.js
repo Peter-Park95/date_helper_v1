@@ -1,25 +1,35 @@
 import React, { useState } from "react";
 import RecommendForm from "./RecommendForm";
+import RecommendationSection from "./components/RecommendationSelection";
 
 function App() {
   const [recommendations, setRecommendations] = useState([]);
 
+  // 코스별 정렬: 1~3단계 순서대로 하나씩
+  const sortedRecommendations = [1, 2, 3]
+    .map((step) => recommendations.find((place) => place.course_step === step))
+    .filter(Boolean);
+
   return (
-    <div>
+    <div style={{ backgroundColor: "#FFF5EB", minHeight: "100vh", paddingBottom: "4rem" }}>
       <RecommendForm onSubmit={setRecommendations} />
       <hr style={{ margin: "2rem 0" }} />
-      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-        {recommendations.map((place, idx) => (
-          <div key={idx} style={{ marginBottom: "2rem", padding: "1rem", border: "1px solid #ddd", borderRadius: "12px" }}>
-            <h3>✨ {place.course_step}단계 추천</h3>
-            <p>📍 {place.place_name}</p>
-            <p>🗺️ {place.address_name}</p>
-            <p>📝 {place.description}</p>
-            <img src={place.thumbnail} alt="썸네일" style={{ width: "100%", maxWidth: "300px", borderRadius: "12px" }} />
-            <br />
-            <a href={place.place_url} target="_blank" rel="noreferrer">🔗 지도 보기</a>
-          </div>
-        ))}
+
+      <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+        {sortedRecommendations.length === 0 ? (
+          <p style={{ textAlign: "center", color: "#888" }}>
+            아직 추천을 받지 않았어요! 💡<br />
+            위의 폼을 통해 데이트 코스를 추천받아보세요.
+          </p>
+        ) : (
+          sortedRecommendations.map((place, idx) => (
+            <RecommendationSection
+              key={idx}
+              step={place.course_step}
+              place={place}
+            />
+          ))
+        )}
       </div>
     </div>
   );

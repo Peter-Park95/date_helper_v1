@@ -18,15 +18,21 @@ export default function RecommendForm({ onSubmit }) {
     setForm({ ...form, location: selectedLocation });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { date, age_group, location } = form;
 
-    const res = await fetch(
-      `http://localhost:5000/recommend-course?location=${encodeURIComponent(location)}&age_group=${age_group}&date=${date}`
-    );
-    const data = await res.json();
-    onSubmit(data);
+    // 👉 fetch 함수 정의
+    const fetchRecommendations = async () => {
+      const { date, age_group, location } = form;
+
+      const res = await fetch(
+        `http://localhost:5000/recommend-course?location=${encodeURIComponent(location)}&age_group=${age_group}&date=${date}`
+      );
+      return await res.json();
+    };
+
+    // 👉 fetch 함수를 onSubmit에 전달
+    onSubmit(fetchRecommendations);
   };
 
   const formStyle = {

@@ -22,12 +22,16 @@ def get_category_thumbnail(category: str):
         return "/images/thumbs/theater.jpg"
     return "/images/thumbs/default.jpg"
 
+def get_static_map_url(x, y):
+    GOOGLE_API_KEY = os.getenv("GOOGLE_STATIC_MAP_API_KEY")
+    return f"https://maps.googleapis.com/maps/api/staticmap?center={y},{x}&zoom=16&size=250x150&markers=color:red%7C{y},{x}&key={GOOGLE_API_KEY}"
+
 def search_places(location: str, keyword: str, step: int):
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
     headers = {"Authorization": f"KakaoAK {KAKAO_API_KEY}"}
     params = {"query": f"{location} {keyword}", "size": 3}
-    
-    print(f"🔍 Searching: {params['query']}")  # 콘솔 로그 찍기
+
+    print(f"🔍 Searching: {params['query']}")
 
     try:
         response = requests.get(url, headers=headers, params=params)
@@ -46,25 +50,27 @@ def search_places(location: str, keyword: str, step: int):
             "place_url": item.get("place_url"),
             "category": item.get("category_name", ""),
             "description": f"{item['place_name']} - {keyword} 관련 추천",
-            "thumbnail": get_category_thumbnail(item.get("category_name", ""))
+            "thumbnail": get_category_thumbnail(item.get("category_name", "")),
+            "x": item.get("x"),
+            "y": item.get("y"),
+            "static_map_url": get_static_map_url(item.get("x"), item.get("y"))  # ✅ 추가
+        
         }
         for item in items
     ]
+
 def generate_recommendations(location: str, age_group: str = "20", date: str = "평일"):
     all_results = []
 
-    # 기본 키워드 세팅
     filtered_keywords = {
         1: ["영화관", "연극", "공연장", "전시회"],
         2: ["맛집", "카페", "레스토랑"],
         3: ["술집", "와인바", "카페", "보드게임"]
     }
 
-    # 10대는 술집, 와인바 제외
     if age_group == "10":
         filtered_keywords[3] = ["카페", "보드게임"]
 
-    # 🔥 "홍대" 또는 "이태원" + "주말"이면 코스 3은 클럽 고정!
     if date == "주말" and location in ["홍대", "이태원"]:
         filtered_keywords[3] = ["클럽"]
 

@@ -1,7 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-
+const globalStyle = document.createElement("style");
+globalStyle.innerHTML = `
+  body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #FFF5EB;
+    font-family: 'Pretendard', sans-serif;
+  }
+`;
+document.head.appendChild(globalStyle);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

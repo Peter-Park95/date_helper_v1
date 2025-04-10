@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      // 이미 로그인된 상태면 로그인 페이지 → 추천 페이지로 리디렉션
+      navigate('/recommend');
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,7 +25,7 @@ function LoginPage() {
         email,
         password,
       });
-
+      
       const { access_token } = res.data;
       localStorage.setItem('access_token', access_token);
       alert('로그인 성공!');

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import LocationSelector from "./LocationSelector"; // ✅ 위치 선택 컴포넌트
 
 export default function RecommendForm({ onSubmit }) {
@@ -6,7 +7,7 @@ export default function RecommendForm({ onSubmit }) {
     date: "주말",
     time: "저녁",
     age_group: "20",
-    location: "", // 선택된 상세 지역 (예: 홍대, 합정)
+    location: "",
   });
 
   const handleChange = (e) => {
@@ -21,29 +22,48 @@ export default function RecommendForm({ onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 👉 fetch 함수 정의
     const fetchRecommendations = async () => {
       const { date, age_group, location } = form;
+      const token = localStorage.getItem("access_token");
 
-      const res = await fetch(
-        `http://localhost:5000/recommend-course?location=${encodeURIComponent(location)}&age_group=${age_group}&date=${date}`
-      );
-      return await res.json();
+      try {
+        const res = await axios.get("http://localhost:5000/recommend-course", {
+          params: {
+            location,
+            age_group,
+            date,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        return res.data;
+
+      } catch (err) {
+        if (err.response?.status === 401) {
+          alert("로그인이 필요합니다.");
+          window.location.href = "/login";
+        } else {
+          alert("추천 정보를 불러오는 데 실패했습니다.");
+          console.error(err);
+        }
+        return [];
+      }
     };
 
-    // 👉 fetch 함수를 onSubmit에 전달
     onSubmit(fetchRecommendations);
   };
 
   const formStyle = {
     padding: "2rem",
     borderRadius: "1rem",
-    backgroundColor: "#FFF8F1", // 크림톤 배경
-    boxShadow: "0 4px 12px rgba(0,0,0,0.05)", // 은은한 그림자
+    backgroundColor: "#FFF8F1",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
     maxWidth: "480px",
     margin: "2rem auto",
     fontFamily: "'Pretendard', sans-serif",
-    border: "1px solid #FFE0B2" // 살구 테두리
+    border: "1px solid #FFE0B2"
   };
 
   const labelStyle = {
@@ -107,7 +127,7 @@ export default function RecommendForm({ onSubmit }) {
         </select>
       </label>
 
-      {/* 위치 선택기 컴포넌트 */}
+      {/* 위치 선택기 */}
       <label style={labelStyle}>
         <LocationSelector onSelect={handleLocationSelect} />
       </label>

@@ -1,5 +1,3 @@
-# backend/app/auth_routes.py
-
 from flask import Blueprint, request, jsonify
 from app.models import db, User
 from flask_bcrypt import Bcrypt

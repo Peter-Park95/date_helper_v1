@@ -13,6 +13,7 @@ def register():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
+    username = data.get('username')
 
     if not email or not password:
         return jsonify({'message': '이메일과 비밀번호를 모두 입력해주세요.'}), 400
@@ -21,7 +22,7 @@ def register():
         return jsonify({'message': '이미 존재하는 이메일입니다.'}), 400
 
     hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
-    new_user = User(email=email, password=hashed_pw)
+    new_user = User(email=email, password=hashed_pw, username=username)
 
     db.session.add(new_user)
     db.session.commit()

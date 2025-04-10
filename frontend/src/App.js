@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage'; // 우리가 아까 만든 로그인 페이지
 import RecommendPage from './pages/RecommendPage'; // 기존 App 컴포넌트 내용 여기로 옮김
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   const isLoggedIn = !!localStorage.getItem('access_token');
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/recommend"
           element={isLoggedIn ? <RecommendPage /> : <Navigate to="/login" />}

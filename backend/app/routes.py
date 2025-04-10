@@ -2,8 +2,10 @@
 from flask import Blueprint, request, jsonify
 from flask_cors import cross_origin
 from app.kakao import generate_recommendations
+from app.auth_routes import auth_bp
 
 api_routes = Blueprint("api_routes", __name__)
+api_routes.register_blueprint(auth_bp)
 
 # 🔻 [기존 라우트 - GPT 기반] (필요 시 주석 처리 가능)
 """

@@ -1,9 +1,4 @@
-# 📱 Date Helper - Frontend
 
-데이트 추천 앱 "Date Helper"의 프론트엔드입니다.  
-React 기반으로 사용자 입력을 받아, ChatGPT API를 통해 추천 코스를 제공합니다.
-
----
 
 ## 🚀 실행 방법
 

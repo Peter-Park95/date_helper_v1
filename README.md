@@ -27,7 +27,3 @@ pip install -r requirements.txt
 python run.p
 
 
-
-# 프론트엔드 실행
-cd frontend
-npm start
